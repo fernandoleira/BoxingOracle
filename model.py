@@ -8,15 +8,15 @@ RUN_NAME = "run with 50 nodes"
 # Read training data
 training_data_df = pd.read_csv('data/boxing_data_training_scaled.csv')
 
-X = training_data_df.drop('result', axis=1).values
-Y = training_data_df[['result']].values
+X = training_data_df.drop(['result_A', 'result_B', 'result_T'], axis=1).values
+Y = training_data_df[['result_A', 'result_B', 'result_T']].values
 
 # Define the Neural Network
 model = Sequential()
 model.add(Dense(50, input_dim=20, activation='relu', name='layer_1'))
 model.add(Dense(100, activation='relu', name='layer_2'))
 model.add(Dense(50, activation='relu', name='layer_3'))
-model.add(Dense(1, activation='linear', name='layer_output'))
+model.add(Dense(3, activation='linear', name='layer_output'))
 
 # Model Compiler
 model.compile(loss="mean_squared_error", optimizer='adam')
@@ -41,14 +41,14 @@ model.fit(
 # Read test data
 test_data_df = pd.read_csv('data/boxing_data_test_scaled.csv')
 
-X_test = test_data_df.drop('result', axis=1).values
-Y_test = test_data_df[['result']].values
+X_test = test_data_df.drop(['result_A', 'result_B', 'result_T'], axis=1).values
+Y_test = test_data_df[['result_A', 'result_B', 'result_T']].values
 
 # Evaluate the model
 test_error_rate = model.evaluate(X_test, Y_test, verbose=0)
 print("The mean squared error (MSE) for the test data set is: {}".format(test_error_rate))
 
 # Save the model
-model.save('trained_models/BoxingModel.h5')
+model.save('trained_models/BoxingModel50.h5')
 print("\n== Model saved on disk ==")
 
